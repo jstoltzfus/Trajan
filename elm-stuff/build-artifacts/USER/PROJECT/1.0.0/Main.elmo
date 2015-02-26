@@ -1,0 +1,54 @@
+Elm.Main = Elm.Main || {};
+Elm.Main.make = function (_elm) {
+   "use strict";
+   _elm.Main = _elm.Main || {};
+   if (_elm.Main.values)
+   return _elm.Main.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   _P = _N.Ports.make(_elm),
+   $moduleName = "Main",
+   $Basics = Elm.Basics.make(_elm),
+   $Graphics$Element = Elm.Graphics.Element.make(_elm),
+   $String = Elm.String.make(_elm),
+   $Text = Elm.Text.make(_elm);
+   var build = 2;
+   var trajan = 2;
+   var senate = 2;
+   var military = 2;
+   var forum = 2;
+   var ship = function (n) {
+      return 2;
+   };
+   var main = A2($Graphics$Element.flow,
+   $Graphics$Element.down,
+   _L.fromArray([$Text.plainText(A2($String.append,
+                "Ship Has ",
+                $Basics.toString(ship)))
+                ,$Text.plainText(A2($String.append,
+                "Forum Has ",
+                $Basics.toString(forum)))
+                ,$Text.plainText(A2($String.append,
+                "Military Has ",
+                $Basics.toString(military)))
+                ,$Text.plainText(A2($String.append,
+                "Senate Has ",
+                $Basics.toString(senate)))
+                ,$Text.plainText(A2($String.append,
+                "Trajan Has ",
+                $Basics.toString(trajan)))
+                ,$Text.plainText(A2($String.append,
+                "Build Has ",
+                $Basics.toString(build)))]));
+   _elm.Main.values = {_op: _op
+                      ,ship: ship
+                      ,forum: forum
+                      ,military: military
+                      ,senate: senate
+                      ,trajan: trajan
+                      ,build: build
+                      ,main: main};
+   return _elm.Main.values;
+};
