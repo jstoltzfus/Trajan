@@ -5,18 +5,18 @@
 Array.prototype.equals = function (array) {
     // if the other array is a falsy value, return
     if (!array)
-        return false;
+    	return false;
 
     // compare lengths - can save a lot of time 
     if (this.length != array.length)
-        return false;
+    	return false;
 
     for (var i = 0, l=this.length; i < l; i++) {
         // Check if we have nested arrays
         if (this[i] instanceof Array && array[i] instanceof Array) {
             // recurse into the nested arrays
             if (!this[i].equals(array[i]))
-                return false;       
+            	return false;       
         }           
         else if (this[i] != array[i]) { 
             // Warning - two different object instances will never be equal: {x:20} != {x:20}
@@ -26,17 +26,82 @@ Array.prototype.equals = function (array) {
     return true;
 }   
 
+// check if an element exists in array using a comparer function
+// comparer : function(currentElement)
+Array.prototype.inArray = function(comparer) { 
+    for(var i=0; i < this.length; i++) { 
+        if(comparer(this[i])) return true; 
+    }
+    return false; 
+}; 
+
+// adds an element to the array if it does not already exist using a comparer 
+// function
+Array.prototype.pushIfNotExist = function(element, comparer) { 
+    if (!this.inArray(comparer)) {
+        this.push(element);
+    }
+}; 
+
 var pits = [2,2,2,2,2,2];
 var pitsInitial = pits.slice(0);
 
+function indexToPitName(pitDex) {
+	var pitName;
+
+	if (pitDex === 0) {
+		pitName = "Ship";
+	} else if (pitDex === 1) {
+		pitName = "Forum"
+	} else if (pitDex === 2) {
+		pitName = "Military"
+	} else if (pitDex === 3) {
+		pitName = "Senate"
+	} else if (pitDex === 4) {
+		pitName = "Trajan"
+	} else if (pitDex === 5) {
+		pitName = "Build"
+	} 
+
+	return pitName
+}
 
 function getRandomInt(min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+//This function is meant to pick the move which creates the most possible future moves
+function findIndexOfPossibilityMove(lst) {
+	if (lst.length === 0) {
+		throw "List of length 0 has no possible moves";
+	}
+	//Assess each current pit
+	for (var i = 0; i < lst.length; i++) {
+		var pitsTemp = lst.slice(0);
+
+		pickUp(i, pitsTemp);
+		console.log("*", pitsTemp)
+
+		//Asses each future pit
+		for (var j = 0; j < pitsTemp.length; j++) {
+			var pitsTemp2 = pitsTemp.slice(0)
+
+			if (pitsTemp2[j] > 0) {
+				var tempChosen = pickUp(j, pitsTemp2);
+				console.log(tempChosen, pitsTemp2);
+			} else {console.log("brap")}
+			
+		}
+
+	}
+
+
+}
+
+//This function picks the pit with the lowest number of stones
 function findMinimumValidIndex(lst) {
 	if (lst.length === 0) {
-		throw "List of length 0 has no minimum, dick";
+		throw "List of length 0 has no minimum";
 	}
 	var minDex = -1;
 	var min = 800;
@@ -51,9 +116,10 @@ function findMinimumValidIndex(lst) {
 
 }
 
+//this function picks the pit with the highest number of stones
 function findMaximumIndex(lst) {
 	if (lst.length === 0) {
-		throw "List of length 0 has no maximum, wangus";
+		throw "List of length 0 has no maximum";
 	}
 	var maxDex = -1;
 	var max = -1;
@@ -67,22 +133,6 @@ function findMaximumIndex(lst) {
 	return maxDex;
 }
 
-function pickUp(pickFrom, pits) {
-
-	stonesInHand = pits[pickFrom];
-	pits[pickFrom] = 0;
-
-	dropIn = pickFrom + 1;
-
-	while (stonesInHand > 0) {
-		pits[dropIn % pits.length]++;
-		stonesInHand--;
-
-		dropIn++;
-
-	}
-}
-
 function findRandomValidPit(lst) {
 
 	var pitSelect = getRandomInt(0, lst.length - 1);
@@ -93,23 +143,44 @@ function findRandomValidPit(lst) {
 	return pitSelect;
 }
 
+function pickUp(pickFrom, lst) {
+
+	//Set stones in hand to the number in the pit
+	stonesInHand = lst[pickFrom];
+	//The stones come out of the pit, so set the count of stones in pit to zero
+	lst[pickFrom] = 0;
+
+	dropIn = pickFrom + 1;
+
+	while (stonesInHand > 0) {
+		lst[dropIn % lst.length]++;
+		stonesInHand--;
+
+		dropIn++;
+
+	}
+	//Return Index of the final pit
+	return ((dropIn -1) % lst.length)
+}
+
+
+
 var count = 0;
 
 while (!pits.equals(pitsInitial) || count === 0) {
 
-	var pitSelect = findRandomValidPit(pits);
+	var pitSelect = findMinimumValidIndex(pits);
 	
-	console.log(count, pitSelect + 1, pits.toString());
+	console.log(count, pitSelect, pits.toString());
 
-	pickUp(pitSelect, pits);
+	var actionTaken = indexToPitName(pickUp(pitSelect, pits));
 
 	count++;
 
+	console.log(actionTaken);
+
 }
 
-console.log(count);
+console.log(count, pitSelect + 1, pits.toString());
 
 
-
-
-//Display pits
