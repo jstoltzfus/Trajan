@@ -47,26 +47,8 @@ Array.prototype.pushIfNotExist = function(element, comparer) {
 
 var pits = [2,2,2,2,2,2];
 var pitsInitial = pits.slice(0);
+var pitNames = ["Ship","Forum","Military","Senate","Trajan","Build"]
 
-function indexToPitName(pitDex) {
-	var pitName;
-
-	if (pitDex === 0) {
-		pitName = "Ship";
-	} else if (pitDex === 1) {
-		pitName = "Forum"
-	} else if (pitDex === 2) {
-		pitName = "Military"
-	} else if (pitDex === 3) {
-		pitName = "Senate"
-	} else if (pitDex === 4) {
-		pitName = "Trajan"
-	} else if (pitDex === 5) {
-		pitName = "Build"
-	} 
-
-	return pitName
-}
 
 function getRandomInt(min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -175,7 +157,7 @@ while (!pits.equals(pitsInitial) || count === 0) {
 	
 	console.log(count, pitSelect, pits.toString());
 
-	var actionTaken = indexToPitName(pickUp(pitSelect, pits));
+	var actionTaken = pitNames[(pickUp(pitSelect, pits))];
 
 	count++;
 
