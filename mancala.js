@@ -26,6 +26,8 @@ Array.prototype.equals = function (array) {
     return true;
 }   
 
+//http://stackoverflow.com/questions/1988349/array-push-if-does-not-exist
+
 // check if an element exists in array using a comparer function
 // comparer : function(currentElement)
 Array.prototype.inArray = function(comparer) { 
